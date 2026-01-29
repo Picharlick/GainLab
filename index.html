@@ -39,7 +39,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background:
+            background: 
                 radial-gradient(circle at 20% 50%, rgba(255, 61, 0, 0.1) 0%, transparent 50%),
                 radial-gradient(circle at 80% 80%, rgba(0, 229, 255, 0.08) 0%, transparent 50%);
             pointer-events: none;
@@ -307,6 +307,134 @@
             line-height: 1.8;
         }
 
+        /* Articles Section */
+        .articles-section {
+            padding: 6rem 5%;
+            background: var(--dark);
+        }
+
+        .articles-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.8rem 1.5rem;
+            background: var(--mid-dark);
+            border: 2px solid transparent;
+            color: var(--text);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            border-color: var(--primary);
+            background: rgba(255, 61, 0, 0.1);
+            color: var(--primary);
+        }
+
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .article-card {
+            background: var(--mid-dark);
+            overflow: hidden;
+            transition: transform 0.3s;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .article-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .article-header {
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(255, 61, 0, 0.1), rgba(0, 229, 255, 0.05));
+        }
+
+        .article-category {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            background: var(--primary);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+
+        .article-card h3 {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.4rem;
+            margin-bottom: 0.8rem;
+            line-height: 1.3;
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .article-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .article-body {
+            padding: 0 2rem 2rem 2rem;
+        }
+
+        .article-excerpt {
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .article-link {
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: gap 0.3s;
+        }
+
+        .article-link:hover {
+            gap: 1rem;
+        }
+
+        .article-status {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background: rgba(255, 214, 0, 0.2);
+            color: var(--accent);
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 3px;
+            margin-left: 0.5rem;
+        }
+
         /* Featured Article */
         .featured {
             padding: 6rem 5%;
@@ -525,6 +653,10 @@
             .newsletter-form {
                 flex-direction: column;
             }
+
+            .articles-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* Scroll indicator */
@@ -537,11 +669,16 @@
             z-index: 1000;
             transition: width 0.1s;
         }
+
+        /* Hidden class for filtering */
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
     <div class="scroll-indicator" id="scrollIndicator"></div>
-
+    
     <div class="container">
         <header>
             <div class="logo">GAINLAB</div>
@@ -562,7 +699,7 @@
                     <span class="highlight">ENTRENAMIENTO</span>
                 </h1>
                 <p>Descubre la evidencia científica detrás de cada repetición, cada serie, cada decisión. Transformamos investigación compleja en conocimiento aplicable para maximizar tus resultados.</p>
-                <a href="#temas" class="cta-button">Explorar Contenido</a>
+                <a href="#articulos" class="cta-button">Explorar Contenido</a>
             </div>
         </section>
 
@@ -588,7 +725,7 @@
         <section class="topics" id="temas">
             <h2 class="section-title">Áreas de Conocimiento</h2>
             <p class="section-subtitle">Exploramos cada aspecto del entrenamiento con rigor científico</p>
-
+            
             <div class="topics-grid">
                 <div class="topic-card">
                     <div class="topic-icon">💪</div>
@@ -628,7 +765,206 @@
             </div>
         </section>
 
-        <section class="featured" id="articulos">
+        <!-- SECCIÓN DE ARTÍCULOS -->
+        <section class="articles-section" id="articulos">
+            <h2 class="section-title">Biblioteca de Artículos</h2>
+            <p class="section-subtitle">Investigación profunda sobre entrenamiento basada en evidencia</p>
+
+            <!-- Filtros por categoría -->
+            <div class="articles-filters">
+                <button class="filter-btn active" data-filter="todos">Todos</button>
+                <button class="filter-btn" data-filter="hipertrofia">Hipertrofia</button>
+                <button class="filter-btn" data-filter="fuerza">Fuerza</button>
+                <button class="filter-btn" data-filter="recuperacion">Recuperación</button>
+                <button class="filter-btn" data-filter="nutricion">Nutrición</button>
+                <button class="filter-btn" data-filter="programacion">Programación</button>
+            </div>
+
+            <!-- Grid de artículos -->
+            <div class="articles-grid">
+                
+                <!-- ARTÍCULO 1 -->
+                <article class="article-card" data-category="recuperacion">
+                    <div class="article-header">
+                        <span class="article-category">Recuperación</span>
+                        <h3>Tiempos de Descanso Óptimos: ¿Cuánto es Realmente Necesario?</h3>
+                        <div class="article-meta">
+                            <span>📅 15 Ene 2026</span>
+                            <span>⏱️ 8 min</span>
+                        </div>
+                    </div>
+                    <div class="article-body">
+                        <p class="article-excerpt">
+                            Análisis de 23 estudios sobre tiempos de descanso entre series y su impacto en hipertrofia, fuerza y volumen. Descubre por qué el descanso óptimo varía según tu objetivo.
+                        </p>
+                        <a href="#" class="article-link">Leer artículo →</a>
+                    </div>
+                </article>
+
+                <!-- ARTÍCULO 2 - PRÓXIMAMENTE -->
+                <article class="article-card" data-category="hipertrofia">
+                    <div class="article-header">
+                        <span class="article-category">Hipertrofia</span>
+                        <h3>Volumen de Entrenamiento: ¿Más es Mejor?
+                            <span class="article-status">Próximamente</span>
+                        </h3>
+                        <div class="article-meta">
+                            <span>📅 Enero 2026</span>
+                            <span>⏱️ 10 min</span>
+                        </div>
+                    </div>
+                    <div class="article-body">
+                        <p class="article-excerpt">
+                            Exploramos la relación dosis-respuesta del volumen de entrenamiento, el concepto de MAV (Maximum Adaptive Volume) y cómo individualizarlo según tu nivel.
+                        </p>
+                        <a href="#" class="article-link">Próximamente →</a>
+                    </div>
+                </article>
+
+                <!-- ARTÍCULO 3 - PRÓXIMAMENTE -->
+                <article class="article-card" data-category="fuerza">
+                    <div class="article-header">
+                        <span class="article-category">Fuerza</span>
+                        <h3>Especificidad vs Variación: El Equilibrio Perfecto
+                            <span class="article-status">Próximamente</span>
+                        </h3>
+                        <div class="article-meta">
+                            <span>📅 Enero 2026</span>
+                            <span>⏱️ 12 min</span>
+                        </div>
+                    </div>
+                    <div class="article-body">
+                        <p class="article-excerpt">
+                            ¿Debes entrenar siempre los mismos movimientos o variar ejercicios? La ciencia del principio SAID y la transferencia del entrenamiento de fuerza.
+                        </p>
+                        <a href="#" class="article-link">Próximamente →</a>
+                    </div>
+                </article>
+
+                <!-- ARTÍCULO 4 - PRÓXIMAMENTE -->
+                <article class="article-card" data-category="nutricion">
+                    <div class="article-header">
+                        <span class="article-category">Nutrición</span>
+                        <h3>Proteína: Timing vs Cantidad Total
+                            <span class="article-status">Próximamente</span>
+                        </h3>
+                        <div class="article-meta">
+                            <span>📅 Febrero 2026</span>
+                            <span>⏱️ 9 min</span>
+                        </div>
+                    </div>
+                    <div class="article-body">
+                        <p class="article-excerpt">
+                            ¿Importa realmente la ventana anabólica? Revisión de meta-análisis sobre distribución proteica, timing post-entreno y leucina threshold.
+                        </p>
+                        <a href="#" class="article-link">Próximamente →</a>
+                    </div>
+                </article>
+
+                <!-- ARTÍCULO 5 - PRÓXIMAMENTE -->
+                <article class="article-card" data-category="programacion">
+                    <div class="article-header">
+                        <span class="article-category">Programación</span>
+                        <h3>Periodización: Lineal vs Ondulatoria vs Bloques
+                            <span class="article-status">Próximamente</span>
+                        </h3>
+                        <div class="article-meta">
+                            <span>📅 Febrero 2026</span>
+                            <span>⏱️ 15 min</span>
+                        </div>
+                    </div>
+                    <div class="article-body">
+                        <p class="article-excerpt">
+                            Comparación exhaustiva de modelos de periodización basada en evidencia. ¿Cuál es más efectivo según tu nivel y objetivos?
+                        </p>
+                        <a href="#" class="article-link">Próximamente →</a>
+                    </div>
+                </article>
+
+                <!-- ARTÍCULO 6 - PRÓXIMAMENTE -->
+                <article class="article-card" data-category="hipertrofia">
+                    <div class="article-header">
+                        <span class="article-category">Hipertrofia</span>
+                        <h3>Rangos de Repeticiones: Desmitificando el 8-12
+                            <span class="article-status">Próximamente</span>
+                        </h3>
+                        <div class="article-meta">
+                            <span>📅 Febrero 2026</span>
+                            <span>⏱️ 11 min</span>
+                        </div>
+                    </div>
+                    <div class="article-body">
+                        <p class="article-excerpt">
+                            ¿Es realmente el rango de 8-12 repeticiones óptimo para hipertrofia? Análisis de estudios recientes sobre carga mecánica y tensión metabólica.
+                        </p>
+                        <a href="#" class="article-link">Próximamente →</a>
+                    </div>
+                </article>
+
+                <!-- ARTÍCULO 7 - PRÓXIMAMENTE -->
+                <article class="article-card" data-category="recuperacion">
+                    <div class="article-header">
+                        <span class="article-category">Recuperación</span>
+                        <h3>Frecuencia de Entrenamiento: 2x vs 3x vs 4x por Semana
+                            <span class="article-status">Próximamente</span>
+                        </h3>
+                        <div class="article-meta">
+                            <span>📅 Marzo 2026</span>
+                            <span>⏱️ 10 min</span>
+                        </div>
+                    </div>
+                    <div class="article-body">
+                        <p class="article-excerpt">
+                            Evidencia científica sobre frecuencia óptima de entrenamiento por grupo muscular. Síntesis proteica, recuperación y volumen equitativo.
+                        </p>
+                        <a href="#" class="article-link">Próximamente →</a>
+                    </div>
+                </article>
+
+                <!-- ARTÍCULO 8 - PRÓXIMAMENTE -->
+                <article class="article-card" data-category="fuerza">
+                    <div class="article-header">
+                        <span class="article-category">Fuerza</span>
+                        <h3>Intensidad Relativa: ¿Entrenar al Fallo o Dejar RIR?
+                            <span class="article-status">Próximamente</span>
+                        </h3>
+                        <div class="article-meta">
+                            <span>📅 Marzo 2026</span>
+                            <span>⏱️ 13 min</span>
+                        </div>
+                    </div>
+                    <div class="article-body">
+                        <p class="article-excerpt">
+                            Análisis profundo sobre entrenar al fallo muscular vs dejar repeticiones en reserva (RIR). Efectos en fuerza, hipertrofia y fatiga acumulada.
+                        </p>
+                        <a href="#" class="article-link">Próximamente →</a>
+                    </div>
+                </article>
+
+                <!-- ARTÍCULO 9 - PRÓXIMAMENTE -->
+                <article class="article-card" data-category="nutricion">
+                    <div class="article-header">
+                        <span class="article-category">Nutrición</span>
+                        <h3>Suplementos con Evidencia Real: Creatina y Más
+                            <span class="article-status">Próximamente</span>
+                        </h3>
+                        <div class="article-meta">
+                            <span>📅 Marzo 2026</span>
+                            <span>⏱️ 14 min</span>
+                        </div>
+                    </div>
+                    <div class="article-body">
+                        <p class="article-excerpt">
+                            Revisión sistemática de suplementos deportivos con evidencia científica sólida. Mecanismos de acción, dosificación óptima y efectos reales.
+                        </p>
+                        <a href="#" class="article-link">Próximamente →</a>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <section class="featured">
             <div class="featured-content">
                 <div class="featured-image">
                     📈
@@ -659,7 +995,7 @@
                 <div class="footer-section">
                     <h4>Contenido</h4>
                     <ul>
-                        <li><a href="#">Artículos</a></li>
+                        <li><a href="#articulos">Artículos</a></li>
                         <li><a href="#">Revisiones</a></li>
                         <li><a href="#">Guías</a></li>
                         <li><a href="#">Infográficos</a></li>
@@ -720,6 +1056,29 @@
             e.target.reset();
         });
 
+        // Article filtering
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const articles = document.querySelectorAll('.article-card');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Update active button
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const filter = btn.dataset.filter;
+
+                // Filter articles
+                articles.forEach(article => {
+                    if (filter === 'todos' || article.dataset.category === filter) {
+                        article.classList.remove('hidden');
+                    } else {
+                        article.classList.add('hidden');
+                    }
+                });
+            });
+        });
+
         // Intersection Observer for animations
         const observerOptions = {
             threshold: 0.1,
@@ -735,7 +1094,7 @@
             });
         }, observerOptions);
 
-        document.querySelectorAll('.topic-card').forEach(card => {
+        document.querySelectorAll('.topic-card, .article-card').forEach(card => {
             card.style.opacity = '0';
             card.style.transform = 'translateY(30px)';
             card.style.transition = 'opacity 0.6s, transform 0.6s';
